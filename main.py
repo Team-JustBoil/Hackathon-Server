@@ -40,18 +40,16 @@ def find_top_keywords(list: List[str], bookmarks: List[int], num_keywords=3):
     word_freq = defaultdict(int)
     for word in words:
         word_freq[word] += 1
-
-    # 최소 힙을 사용하여 상위 num_keywords 개의 키워드 추출
-    min_heap = []
+    
+    # 최대 힙을 사용하여 상위 num_keywords 개의 키워드 추출
+    max_heap = []
     for word, freq in word_freq.items():
-        heapq.heappush(min_heap, (-freq, word))
-        if len(min_heap) > num_keywords:
-            heapq.heappop(min_heap)
+        heapq.heappush(max_heap, (-freq, word))  # 빈도수에 음수를 적용하여 최대 힙 행동 모방
 
     # 키워드 문자열만 반환 (빈도수가 높은 순으로)
     top_keywords = []
-    while min_heap:
-        freq, word = heapq.heappop(min_heap)
+    for _ in range(num_keywords):
+        freq, word = heapq.heappop(max_heap)
         top_keywords.append(word)
 
     return top_keywords[::-1]  # 역순으로 반환하여 빈도수가 가장 높은 순서로 만듦
